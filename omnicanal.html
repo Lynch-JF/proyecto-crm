@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Vincular Redes</title>
+
+<style>
+
+/* ===== BASE ===== */
+
+body{
+margin:0;
+font-family:Segoe UI, sans-serif;
+background:linear-gradient(135deg,#1e3c72,#2a5298);
+display:flex;
+justify-content:center;
+align-items:center;
+min-height:100vh;
+  transition:opacity .3s ease;
+}
+
+.panel{
+background:white;
+width:95%;
+max-width:750px;
+border-radius:14px;
+padding:30px;
+box-shadow:0 15px 40px rgba(0,0,0,.25);
+animation:fade .4s ease;
+}
+
+@keyframes fade{
+from{opacity:0;transform:translateY(10px);}
+}
+
+h1{
+margin:0 0 10px;
+text-align:center;
+}
+
+.subtitle{
+text-align:center;
+color:#666;
+margin-bottom:25px;
+}
+
+/* ===== CARDS ===== */
+
+.integration-card{
+border:1px solid #eee;
+border-radius:12px;
+padding:18px;
+margin-bottom:18px;
+display:flex;
+flex-direction:column;
+gap:10px;
+transition:.2s;
+}
+
+.integration-card:hover{
+border-color:#2a5298;
+transform:translateY(-2px);
+}
+
+.row{
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:10px;
+}
+
+.platform{
+font-weight:bold;
+font-size:18px;
+}
+
+.status{
+padding:4px 10px;
+border-radius:20px;
+font-size:12px;
+background:#eee;
+}
+
+.connected{
+background:#c9f7d5;
+color:#0a7a3c;
+}
+
+.pending{
+background:#ffe8a3;
+color:#8a6d00;
+}
+
+input{
+width:100%;
+padding:10px;
+border-radius:8px;
+border:1px solid #ddd;
+}
+
+/* ===== BUTTONS ===== */
+
+button{
+padding:10px 16px;
+border:none;
+border-radius:8px;
+cursor:pointer;
+font-weight:bold;
+background:#2a5298;
+color:white;
+transition:.2s;
+}
+
+button:hover{
+opacity:.9;
+}
+
+.connect{
+background:#25D366;
+}
+
+.ig{
+background:#E1306C;
+}
+
+.fb{
+background:#1877F2;
+}
+
+/* ===== RESPONSIVE ===== */
+
+@media(max-width:600px){
+.row{
+flex-direction:column;
+align-items:flex-start;
+}
+}
+
+.actions-footer{
+margin-top:20px;
+text-align:center;
+}
+
+#goInbox{
+width:100%;
+padding:14px;
+font-size:16px;
+background:#ccc;
+cursor:not-allowed;
+transition:.2s;
+}
+
+#goInbox.active{
+background:#2a5298;
+cursor:pointer;
+}
+
+
+</style>
+</head>
+
+<body>
+
+<div class="panel">
+
+<h1>Vincular canales</h1>
+<div class="subtitle">
+Conecta tus redes para empezar a recibir mensajes
+</div>
+
+<!-- WHATSAPP -->
+
+<div class="integration-card">
+
+<div class="row">
+<div class="platform">WhatsApp Business</div>
+<span class="status pending" id="waStatus">Pendiente</span>
+</div>
+
+<input placeholder="Número de WhatsApp" id="waInput">
+
+<button class="connect" onclick="connectWA()">
+Conectar WhatsApp
+</button>
+
+</div>
+
+<!-- INSTAGRAM -->
+
+<div class="integration-card">
+
+<div class="row">
+<div class="platform">Instagram</div>
+<span class="status pending" id="igStatus">Pendiente</span>
+</div>
+
+<button class="ig" onclick="connectIG()">
+Conectar Instagram
+</button>
+
+</div>
+
+<!-- FACEBOOK -->
+
+<div class="integration-card">
+
+<div class="row">
+<div class="platform">Facebook Messenger</div>
+<span class="status pending" id="fbStatus">Pendiente</span>
+</div>
+
+<button class="fb" onclick="connectFB()">
+Conectar Facebook
+</button>
+
+</div>
+<div class="actions-footer">
+  <button id="goInbox" disabled onclick="goToInbox()">
+    Ir a la bandeja de mensajes →
+  </button>
+</div>
+
+</div>
+
+
+
+
+
+
+<script>
+
+const status = {
+  wa:false,
+  ig:false,
+  fb:false
+};
+
+function connectWA(){
+const num=document.getElementById("waInput").value;
+if(!num) return alert("Ingresa un número");
+
+updateStatus("waStatus","wa");
+}
+
+function connectIG(){
+updateStatus("igStatus","ig");
+}
+
+function connectFB(){
+updateStatus("fbStatus","fb");
+}
+
+function updateStatus(id,key){
+
+const el=document.getElementById(id);
+el.textContent="Conectado";
+el.classList.remove("pending");
+el.classList.add("connected");
+
+status[key]=true;
+
+checkAllConnected();
+}
+
+function checkAllConnected(){
+
+const ready = Object.values(status).every(v=>v);
+
+const btn=document.getElementById("goInbox");
+
+if(ready){
+btn.disabled=false;
+btn.classList.add("active");
+
+/* 👉 auto redirección opcional */
+setTimeout(()=>{
+goToInbox();
+},1200);
+
+}
+}
+
+function goToInbox(){
+
+  document.body.style.opacity="0";
+
+  setTimeout(()=>{
+    window.location.href="menssage.html";
+  },300);
+
+}
+
+
+
+
+</script>
+
+</body>
+</html>
